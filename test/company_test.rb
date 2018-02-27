@@ -117,4 +117,30 @@ class CompanyTest < Minitest::Test
     assert_equal failure_hash, company.quality_of_file(bad_filename)
     assert_equal success_hash, company.quality_of_file(good_filename)
   end
+
+  def test_find_employee_by_id
+    company = Company.new
+    filename = './data/employees.csv'
+    company.load_employees(filename)
+    existing_employee = company.find_employee_by_id(2)
+    ghost_employee = company.find_employee_by_id(20)
+
+    assert_nil ghost_employee
+    assert_instance_of Employee, existing_employee
+    assert_equal 'John Smith', existing_employee.name
+    assert_equal 'Engineer', existing_employee.role
+  end
+
+  def test_find_project_by_id
+    company = Company.new
+    filename = './data/projects.csv'
+    company.load_projects(filename)
+    existing_project = company.find_project_by_id(2)
+    ghost_project = company.find_project_by_id(20)
+
+    assert_nil ghost_project
+    assert_instance_of Project, existing_project
+    assert_equal 'More Widgets', existing_project.name
+    assert_equal 2, existing_project.id
+  end
 end

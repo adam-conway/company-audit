@@ -49,4 +49,16 @@ class Company
     end
     quality_check
   end
+
+  def find_employee_by_id(employee_id)
+    @employees.find do |employee|
+      employee.id == employee_id
+    end
+  end
+
+  def find_project_by_id(project_id)
+    @projects.find do |project|
+      project.id == project_id
+    end
+  end
 end
