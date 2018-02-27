@@ -3,7 +3,11 @@ require './modules/date_handler'
 
 class Audit
   attr_reader :company,
-              :invalid_days
+              :invalid_days,
+              :employee,
+              :project,
+              :start_date,
+              :end_date
 
   def load_company(company)
     @company = company
@@ -12,10 +16,11 @@ class Audit
   def were_invalid_days_worked
     @invalid_days = []
     @company.timesheets.each do |timesheet|
+      date = timesheet.date
       find_timesheet_attributes(timesheet)
       invalid_employee(timesheet) if @employee.nil?
       invalid_project(timesheet) if @project.nil?
-      start_end(timesheet) if timesheet.date < @start_date || timesheet.date > @end_date
+      start_end(timesheet) if date < @start_date || date > @end_date
       weekend(timesheet) if timesheet.date.saturday? || timesheet.date.sunday?
     end
     output(@invalid_days)

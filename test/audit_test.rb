@@ -61,14 +61,15 @@ class AuditTest < Minitest::Test
   end
 
   def test_find_timesheet_attributes
-    # audit = Audit.new
-    # company = Company.new
-    # company.load_employees('./data/employees.csv')
-    # company.load_projects('./data/projects.csv')
-    # company.load_timesheets('./data/timesheets.csv')
-    # audit.load_company(company)
+    skip
+    audit = Audit.new
+    company = Company.new
+    company.load_employees('./data/employees.csv')
+    company.load_projects('./data/projects.csv')
+    company.load_timesheets('./data/timesheets.csv')
+    audit.load_company(company)
 
-    # audit.find_timesheet_attributes(timesheet)
+    audit.find_timesheet_attributes(company.timesheet)
   end
 
   def test_invalid_employee
