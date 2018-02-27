@@ -2,7 +2,8 @@ require './lib/company'
 require './modules/date_handler'
 
 class Audit
-  attr_reader :company
+  attr_reader :company,
+              :invalid_days
 
   def load_company(company)
     @company = company
@@ -11,17 +12,19 @@ class Audit
   def were_invalid_days_worked
     @invalid_days = []
     @company.timesheets.each do |timesheet|
-      # date = DHDate.new(timesheet.date)
       find_timesheet_attributes(timesheet)
       invalid_employee(timesheet) if @employee.nil?
       invalid_project(timesheet) if @project.nil?
-      start_end(timesheet) if timesheet.date < @start_date || timesheet.date > @end_date#date.date_between(@start_date, @end_date)
+      start_end(timesheet) if timesheet.date < @start_date || timesheet.date > @end_date
       weekend(timesheet) if timesheet.date.saturday? || timesheet.date.sunday?
     end
+    output(@invalid_days)
+  end
 
+  def output(invalid_days)
     puts 'Invalid Days Worked:'
-    return 'None' if @invalid_days.empty?
-    @invalid_days.each do |invalid_day|
+    return 'None' if invalid_days.empty?
+    invalid_days.each do |invalid_day|
       puts invalid_day
     end
   end
@@ -34,6 +37,7 @@ class Audit
   end
 
   def invalid_employee(timesheet)
+    binding.pry
     string = "Someone worked on #{@project.name} on #{timesheet.date},
     it was not a valid employee"
     @invalid_days << string
