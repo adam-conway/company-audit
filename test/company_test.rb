@@ -100,4 +100,21 @@ class CompanyTest < Minitest::Test
     assert_instance_of Timesheet, company.timesheets.first
     assert_equal 480, company.timesheets.first.minutes
   end
+
+  def test_quality_of_file
+    company = Company.new
+    bad_filename = './data/bad_timesheets.csv'
+    good_filename = './data/timesheets.csv'
+    failure_hash = {
+      success: false,
+      error: 'bad data'
+    }
+    success_hash = {
+      success: true,
+      error: nil
+    }
+
+    assert_equal failure_hash, company.quality_of_file(bad_filename)
+    assert_equal success_hash, company.quality_of_file(good_filename)
+  end
 end
