@@ -27,7 +27,7 @@ class CompanyTest < Minitest::Test
     expected = company.load_employees(filename)
 
     assert_equal failure_hash, expected
-    assert_equal 0, company.length
+    assert_equal 0, company.employees.length
   end
 
   def test_loading_good_employees_csv
@@ -43,5 +43,61 @@ class CompanyTest < Minitest::Test
     assert_equal 2, company.employees.length
     assert_instance_of Employee, company.employees.first
     assert_equal 'Susan Smith', company.employees.first.name
+  end
+
+  def test_loading_bad_projects_csv
+    company = Company.new
+    filename = './data/bad_projects.csv'
+    failure_hash = {
+      success: false,
+      error: 'bad data'
+    }
+    expected = company.load_projects(filename)
+
+    assert_equal failure_hash, expected
+    assert_equal 0, company.projects.length
+  end
+
+  def test_loading_good_projects_csv
+    company = Company.new
+    filename = './data/projects.csv'
+    success_hash = {
+      success: true,
+      error: nil
+    }
+    expected = company.load_projects(filename)
+
+    assert_equal success_hash, expected
+    assert_equal 3, company.projects.length
+    assert_instance_of Project, company.projects.first
+    assert_equal 'Widgets', company.projects.first.name
+  end
+
+  def test_loading_bad_timesheets_csv
+    company = Company.new
+    filename = './data/bad_timesheets.csv'
+    failure_hash = {
+      success: false,
+      error: 'bad data'
+    }
+    expected = company.load_timesheets(filename)
+
+    assert_equal failure_hash, expected
+    assert_equal 0, company.timesheets.length
+  end
+
+  def test_loading_good_timesheets_csv
+    company = Company.new
+    filename = './data/timesheets.csv'
+    success_hash = {
+      success: true,
+      error: nil
+    }
+    expected = company.load_timesheets(filename)
+
+    assert_equal success_hash, expected
+    assert_equal 25, company.timesheets.length
+    assert_instance_of Timesheet, company.timesheets.first
+    assert_equal 480, company.timesheets.first.minutes
   end
 end
