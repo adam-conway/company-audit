@@ -16,4 +16,32 @@ class CompanyTest < Minitest::Test
     assert_instance_of Array, company.projects
     assert_instance_of Array, company.timesheets
   end
+
+  def test_loading_bad_employees_csv
+    company = Company.new
+    filename = './data/bad_employees.csv'
+    failure_hash = {
+      success: false,
+      error: 'bad data'
+    }
+    expected = company.load_employees(filename)
+
+    assert_equal failure_hash, expected
+    assert_equal 0, company.length
+  end
+
+  def test_loading_good_employees_csv
+    company = Company.new
+    filename = './data/employees.csv'
+    success_hash = {
+      success: true,
+      error: nil
+    }
+    expected = company.load_employees(filename)
+
+    assert_equal success_hash, expected
+    assert_equal 2, company.employees.length
+    assert_instance_of Employee, company.employees.first
+    assert_equal 'Susan Smith', company.employees.first.name
+  end
 end
